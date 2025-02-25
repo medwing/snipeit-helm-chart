@@ -151,3 +151,12 @@ extraVolumes: []
   #   volumeAttributes:
   #     secretProviderClass: "secret-csi-provider"
   #  name : secrets-store01-inline
+
+lifecycle:
+  postStart:
+    enabled: false
+    commands: []
+    # Example usage:
+    # enabled: true
+    # commands:
+    #   - "(grep -q 'php artisan backup:run' /etc/crontab || echo '* * * * * cd /var/www/html && php artisan backup:run' >> /etc/crontab)"
