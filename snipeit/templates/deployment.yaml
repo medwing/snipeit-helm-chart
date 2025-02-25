@@ -34,6 +34,17 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.sessions.mountPath }}
               subPath: {{ .Values.persistence.sessions.subPath }}
+          {{- if .Values.initCommands.enabled }}
+{{- range $index, $command := .Values.initCommands.commands }}
+        - name: custom-init-command-{{ $index }}
+          image: busybox
+          command: ["sh", "-c", "{{ $command }}"]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/snipeit
+              subPath: www
+{{- end }}
+{{- end }}
       containers:
         - name: {{ include "snipeit.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
