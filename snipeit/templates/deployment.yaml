@@ -60,7 +60,18 @@ spec:
               value: {{ .Values.config.snipeit.timezone | quote }}
             - name: APP_LOCALE
               value: {{ .Values.config.snipeit.locale | quote }}
-
+          lifecycle:
+            {{- if .Values.lifecycle.postStart.enabled }}
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - |
+                    {{- range .Values.lifecycle.postStart.commands }}
+                    {{ . }};
+                    {{- end }}
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "snipeit.fullname" . }}
